@@ -28,8 +28,8 @@ class GraphActivity : AppCompatActivity(), SensorEventListener {
         setContentView(R.layout.activity_graph)
         createChart()
         this.sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        this.accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-    }
+        this.accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
+}
     private fun createChart(){
         val chart = findViewById<LineChart>(R.id.chart)
         chart.setTouchEnabled(false)
@@ -68,7 +68,7 @@ class GraphActivity : AppCompatActivity(), SensorEventListener {
         data.notifyDataChanged()
         chart.notifyDataSetChanged()
         chart.moveViewToX(data.entryCount.toFloat())
-        chart.setVisibleXRangeMaximum(100f)
+        chart.setVisibleXRangeMaximum(30f)
     }
     private fun createSet(): LineDataSet {
         var set = LineDataSet(null, "dynamic data")
