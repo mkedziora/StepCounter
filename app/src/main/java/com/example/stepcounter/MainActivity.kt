@@ -18,9 +18,5 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, GraphActivity::class.java)
             startActivity(intent)
         }
-        infoBtn.setOnClickListener {
-            val intent = Intent(this, InfoActivity::class.java)
-            startActivity(intent)
-        }
     }
 }
