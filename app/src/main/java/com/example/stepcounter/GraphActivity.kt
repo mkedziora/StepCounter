@@ -1,8 +1,7 @@
 package com.example.stepcounter
 
 import android.content.Context
-import android.graphics.Color.RED
-import android.graphics.Color.WHITE
+import android.graphics.Color.*
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -15,6 +14,7 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import kotlinx.android.synthetic.main.activity_graph.*
 
 
@@ -53,28 +53,33 @@ class GraphActivity : AppCompatActivity(), SensorEventListener {
         val rightAxis = chart.axisRight
         rightAxis.isEnabled = false
         chart.setDrawBorders(false)
-        var data = LineData()
+        val set = createSet("X Axis", RED)
+        val set1 = createSet("Y Axis", GREEN)
+        val set2 = createSet("Z Axis", BLUE)
+        val dataSets = listOf<ILineDataSet>(set, set1, set2)
+        val data = LineData(dataSets)
         chart.data = data
+        chart.invalidate()
 
     }
     private fun addEntry(event: SensorEvent){
-        var data = chart.data
-        var set = data.getDataSetByIndex(0)
-        if(set == null){
-            set = createSet()
-            data.addDataSet(set)
-        }
-        data.addEntry(Entry(set.entryCount.toFloat(), event.values[1]), 0)
+        val data = chart.data
+        val set = data.getDataSetByIndex(0)
+        val set1 = data.getDataSetByIndex(1)
+        val set2 = data.getDataSetByIndex(2)
+        set.addEntry(Entry(set.entryCount.toFloat(), event.values[0]))
+        set1.addEntry(Entry(set1.entryCount.toFloat(), event.values[1]))
+        set2.addEntry(Entry(set2.entryCount.toFloat(), event.values[2]))
         data.notifyDataChanged()
         chart.notifyDataSetChanged()
         chart.moveViewToX(data.entryCount.toFloat())
         chart.setVisibleXRangeMaximum(30f)
     }
-    private fun createSet(): LineDataSet {
-        var set = LineDataSet(null, "dynamic data")
+    private fun createSet(label: String, color: Int): LineDataSet {
+        val set = LineDataSet(null, label)
         set.axisDependency = YAxis.AxisDependency.LEFT
         set.lineWidth = 3f
-        set.color = RED
+        set.color = color
         set.mode = LineDataSet.Mode.CUBIC_BEZIER
         set.cubicIntensity = 0.2f
         set.setDrawCircles(false)

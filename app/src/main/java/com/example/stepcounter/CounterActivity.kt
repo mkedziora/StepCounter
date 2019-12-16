@@ -9,6 +9,7 @@ import android.opengl.Matrix
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_counter.*
 
 
 class CounterActivity : AppCompatActivity(), SensorEventListener {
@@ -55,10 +56,13 @@ class CounterActivity : AppCompatActivity(), SensorEventListener {
             val inv = FloatArray(16)
             Matrix.invertM(inv, 0, R, 0)
             Matrix.multiplyMV(earthAcc, 0, inv, 0, deviceRelativeAcceleration, 0)
-            Log.d(
-                "Acceleration",
-                "Values: (" + earthAcc[0] + ", " + earthAcc[1] + ", " + earthAcc[2] + ")"
-            )
+            var yAxis: List<Float>
+            yAxis = listOf(earthAcc[2])
+            var filteredValues = yAxis.filter { value -> value > 5 }
+            if(filteredValues.isNotEmpty()){
+                steps++
+                textView2.text = steps.toString()
+            }
         } else if (event.sensor.type == Sensor.TYPE_GRAVITY) {
             gravityValues = event.values
         } else if (event.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) {
