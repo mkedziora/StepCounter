@@ -58,7 +58,7 @@ class CounterActivity : AppCompatActivity(), SensorEventListener {
             Matrix.multiplyMV(earthAcc, 0, inv, 0, deviceRelativeAcceleration, 0)
             var yAxis: List<Float>
             yAxis = listOf(earthAcc[2])
-            var filteredValues = yAxis.filter { value -> value > 5 }
+            var filteredValues = yAxis.filter { value -> value > 2 }
             if(filteredValues.isNotEmpty()){
                 steps++
                 textView2.text = steps.toString()
